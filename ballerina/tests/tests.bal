@@ -14,112 +14,113 @@
 // specific language governing permissions and limitations
 // under the License.
 
-import ballerina/test;
 import ballerina/http;
-import ballerina/io;
 import ballerina/oauth2;
+import ballerina/test;
 
 const string CLIENT_ID = "bf7aa889-a677-4a76-93a6-c6b9fc896ff3";
 const string CLIENT_SECRET = "5b1ce2fe-0634-4055-ab9c-3bffe7efa00c";
 const string REFRESH_TOKEN = "na1-2d3a-d4fb-4043-8229-7a7d9fc128df";
 
+OAuth2RefreshTokenGrantConfig auth = {
+    clientId: CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
+    refreshToken: REFRESH_TOKEN,
+    credentialBearer: oauth2:POST_BODY_BEARER
+};
 
+// Global Client configuration for HTTP communication
+ConnectionConfig config = { 
+    httpVersion: http:HTTP_2_0, 
+    timeout: 60, 
+    auth: auth 
+};
 
-   OAuth2RefreshTokenGrantConfig auth = {
-       clientId: CLIENT_ID,
-       clientSecret: CLIENT_SECRET,
-       refreshToken: REFRESH_TOKEN,
-       credentialBearer: oauth2:POST_BODY_BEARER 
-   };
-
-
-
-// Global Client instance
-ConnectionConfig config = {httpVersion: http:HTTP_2_0, timeout: 60,auth: auth};
-
+// HubSpot CRM Client for interacting with HubSpot's Object Schemas API
 final Client hpClient = check new Client(config, "https://api.hubapi.com/crm-object-schemas/v3/schemas");
 
-
-
-
+// Test: Get Schema - Fetches a list of object schemas
 @test:Config {
     groups: ["live_tests", "mock_tests"]
 }
-
 isolated function testGetSchemas() returns error? {
-
-    
-
-    
-    // Mock API response for GET request
-    string objectType = "custom_object_type";
-    string resourcePath = "/crm-object-schemas/v3/schemas/${objectType}";
-
-
-
+    // Make GET request to fetch schemas
     CollectionResponseObjectSchemaNoPaging response = check hpClient->/crm\-object\-schemas/v3/schemas;
 
-
-    io:print(response);
-
-
-    // test:assertTrue(response is http:Response);
-
+    // Assert that the response is of type CollectionResponseObjectSchemaNoPaging
+    test:assertTrue(response is CollectionResponseObjectSchemaNoPaging, "Expected response to be of type CollectionResponseObjectSchemaNoPaging");
 }
 
-// @test:Config {
-//     groups: ["live_tests", "mock_tests"]
-// }
+// Test: Create Schema - Creates a new schema
+@test:Config {
+    groups: ["live_tests", "mock_tests"]
+}
+isolated function testCreateSchema() returns error? {
+    // Define the payload for creating a new object schema
+    ObjectSchemaEgg payload = {
+        "secondaryDisplayProperties": ["string"],
+        "requiredProperties": ["my_object_property"],
+        "searchableProperties": ["string"],
+        "primaryDisplayProperty": "my_object_property",
+        "name": "my_object",
+        "description": "string",
+        "associatedObjects": ["CONTACT"],
+        "properties": [],
+        "labels": {
+            "plural": "My objects",
+            "singular": "My object"
+        }
+    };
 
-// isolated function testCreateSchema() returns error? {
-//     // Mock API response for POST request
-//     string resourcePath = "/crm-object-schemas/v3/schemas";
+    // Make POST request to create the schema
+    ObjectSchema response = check hpClient->/crm\-object\-schemas/v3/schemas.post(payload);
 
+    // Assert that the response is of type ObjectSchema
+    test:assertTrue(response is ObjectSchema, "Expected response to be of type ObjectSchema");
+}
 
-//     // Testing POST request for creating schema
-//     ObjectSchemaEgg payload = new; // Mock payload
-//     var response = hpClient.post(resourcePath, payload);
-//     test:assertTrue(response is http:Response);
-//     http:Response actualResponse = <http:Response>response;
-//     json payloadResponse = check actualResponse.getJsonPayload();
-//     test:assertEquals(payloadResponse.status.toString(), "created");
-//     test:assertEquals(payloadResponse.id.toString(), "12345");
-// }
+// Test: Delete Schema - Deletes a specific schema by its ID
+@test:Config {
+    groups: ["live_tests", "mock_tests"]
+}
+isolated function testDeleteSchema() returns error? {
+    // Define the object schema ID to delete
+    string objId = "testid";
 
-// @test:Config {
-//     groups: ["live_tests", "mock_tests"]
-// }
+    // Make DELETE request to delete the schema
+    http:Response response = check hpClient->/crm\-object\-schemas/v3/schemas/[objId].delete();
 
-// isolated function testDeleteSchema() returns error? {
-//     // Mock API response for DELETE request
-//     string objectType = "custom_object_type";
-//     string resourcePath = "/crm-object-schemas/v3/schemas/${objectType}";
+    // Assert that the response is of type http:Response
+    test:assertTrue(response is http:Response, "Expected response to be of type http:Response");
+}
 
+// Test: Update Schema - Updates an existing schema by ID
+@test:Config {
+    groups: ["live_tests", "mock_tests"]
+}
+isolated function testPatchSchema() returns error? {
+    // Define the payload for updating an object schema
+    ObjectSchemaEgg payload = {
+        "secondaryDisplayProperties": ["string"],
+        "requiredProperties": ["my_object_property"],
+        "searchableProperties": ["string"],
+        "primaryDisplayProperty": "my_object_property",
+        "name": "my_object",
+        "description": "string",
+        "associatedObjects": ["CONTACT"],
+        "properties": [],
+        "labels": {
+            "plural": "My objects",
+            "singular": "My object"
+        }
+    };
 
-//     // Testing DELETE request for schema
-//     var response = hpClient.delete(resourcePath);
-//     test:assertTrue(response is http:Response);
-//     http:Response actualResponse = <http:Response>response;
-//     json payloadResponse = check actualResponse.getJsonPayload();
-//     test:assertEquals(payloadResponse.status.toString(), "deleted");
-// }
+    // Define the object schema ID to patch
+    string objId = "testid2";
 
-// @test:Config {
-//     groups: ["live_tests", "mock_tests"]
-// }
+    // Make PATCH request to update the schema
+    ObjectTypeDefinition response = check hpClient->/crm\-object\-schemas/v3/schemas/[objId].patch(payload);
 
-// isolated function testPatchSchema() returns error? {
-//     // Mock API response for PATCH request
-//     string objectType = "custom_object_type";
-//     string resourcePath = "/crm-object-schemas/v3/schemas/${objectType}";
-
-
-//     // Testing PATCH request for schema update
-//     ObjectTypeDefinitionPatch payload = new; // Mock payload
-//     var response = hpClient.patch(resourcePath, payload);
-//     test:assertTrue(response is http:Response);
-//     http:Response actualResponse = <http:Response>response;
-//     json payloadResponse = check actualResponse.getJsonPayload();
-//     test:assertEquals(payloadResponse.status.toString(), "updated");
-// }
-
+    // Assert that the response is of type ObjectTypeDefinition
+    test:assertTrue(response is ObjectTypeDefinition, "Expected response to be of type ObjectTypeDefinition");
+}
