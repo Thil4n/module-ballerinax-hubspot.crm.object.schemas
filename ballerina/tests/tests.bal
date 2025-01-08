@@ -45,7 +45,7 @@ final Client hpClient = check new Client(config, "https://api.hubapi.com/crm-obj
 }
 isolated function testGetSchemas() returns error? {
     // Make GET request to fetch schemas
-    CollectionResponseObjectSchemaNoPaging response = check hpClient->/crm\-object\-schemas/v3/schemas;
+    CollectionResponseObjectSchemaNoPaging response = check hpClient->/.get();
 
     // Assert that the response is of type CollectionResponseObjectSchemaNoPaging
     test:assertTrue(response is CollectionResponseObjectSchemaNoPaging, "Expected response to be of type CollectionResponseObjectSchemaNoPaging");
@@ -73,7 +73,7 @@ isolated function testCreateSchema() returns error? {
     };
 
     // Make POST request to create the schema
-    ObjectSchema response = check hpClient->/crm\-object\-schemas/v3/schemas.post(payload);
+    ObjectSchema response = check hpClient->/.post(payload);
 
     // Assert that the response is of type ObjectSchema
     test:assertTrue(response is ObjectSchema, "Expected response to be of type ObjectSchema");
@@ -88,7 +88,7 @@ isolated function testDeleteSchema() returns error? {
     string objId = "testid";
 
     // Make DELETE request to delete the schema
-    http:Response response = check hpClient->/crm\-object\-schemas/v3/schemas/[objId].delete();
+    http:Response response = check hpClient->/[objId].delete();
 
     // Assert that the response is of type http:Response
     test:assertTrue(response is http:Response, "Expected response to be of type http:Response");
@@ -98,9 +98,11 @@ isolated function testDeleteSchema() returns error? {
 @test:Config {
     groups: ["live_tests", "mock_tests"]
 }
+
+
 isolated function testPatchSchema() returns error? {
     // Define the payload for updating an object schema
-    ObjectSchemaEgg payload = {
+    ObjectTypeDefinitionPatch payload = {
         "secondaryDisplayProperties": ["string"],
         "requiredProperties": ["my_object_property"],
         "searchableProperties": ["string"],
@@ -119,8 +121,50 @@ isolated function testPatchSchema() returns error? {
     string objId = "testid2";
 
     // Make PATCH request to update the schema
-    ObjectTypeDefinition response = check hpClient->/crm\-object\-schemas/v3/schemas/[objId].patch(payload);
+    ObjectTypeDefinition response = check hpClient->/[objId].patch(payload);
 
     // Assert that the response is of type ObjectTypeDefinition
     test:assertTrue(response is ObjectTypeDefinition, "Expected response to be of type ObjectTypeDefinition");
 }
+
+
+// Test: Create Schema - Creates a new schema
+@test:Config {
+    groups: ["live_tests", "mock_tests"]
+}
+isolated function testCreateAssosiation() returns error? {
+
+    // Define the object schema ID to patch
+    string objId = "testid2";
+
+    // Define the payload for creating a new object schema
+    AssociationDefinitionEgg payload = {
+        "fromObjectTypeId": "2-123456",
+        "name": "my_object_to_contact",
+        "toObjectTypeId": "contact"
+    };
+
+    // Make POST request to create the schema
+    AssociationDefinition response = check hpClient->/[objId]/associations.post(payload);
+
+    // Assert that the response is of type ObjectSchema
+    test:assertTrue(response is ObjectSchema, "Expected response to be of type ObjectSchema");
+}
+
+
+// Test: Delete Schema - Deletes a specific assosiation by its ID
+@test:Config {
+    groups: ["live_tests", "mock_tests"]
+}
+isolated function testDeleteAssosiation() returns error? {
+    // Define the object schema ID to delete
+    string objId = "testid";
+    string AssId = "testid";
+
+    // Make DELETE request to delete the schema
+    http:Response response = check hpClient->/[objId]/associations/[AssId].delete();
+
+    // Assert that the response is of type http:Response
+    test:assertTrue(response is http:Response, "Expected response to be of type http:Response");
+}
+

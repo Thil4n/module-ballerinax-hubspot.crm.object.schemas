@@ -62,7 +62,7 @@ public isolated client class Client {
         return;
     }
 
-    resource isolated function delete crm\-object\-schemas/v3/schemas/[string objectType](map<string|string[]> headers = {}, *DeleteCrmObjectSchemasV3SchemasObjecttype_archiveQueries queries) returns http:Response|error {
+    resource isolated function delete [string objectType](map<string|string[]> headers = {}, *DeleteCrmObjectSchemasV3SchemasObjecttype_archiveQueries queries) returns http:Response|error {
         string resourcePath = string `/${getEncodedUri(objectType)}`;
         map<anydata> headerValues = {...headers};
         if self.apiKeyConfig is ApiKeysConfig {
@@ -73,7 +73,7 @@ public isolated client class Client {
         return self.clientEp->delete(resourcePath, headers = httpHeaders);
     }
 
-    resource isolated function delete crm\-object\-schemas/v3/schemas/[string objectType]/associations/[string associationIdentifier](map<string|string[]> headers = {}) returns http:Response|error {
+    resource isolated function delete [string objectType]/associations/[string associationIdentifier](map<string|string[]> headers = {}) returns http:Response|error {
         string resourcePath = string `/${getEncodedUri(objectType)}/associations/${getEncodedUri(associationIdentifier)}`;
         map<anydata> headerValues = {...headers};
         if self.apiKeyConfig is ApiKeysConfig {
@@ -83,7 +83,7 @@ public isolated client class Client {
         return self.clientEp->delete(resourcePath, headers = httpHeaders);
     }
 
-    resource isolated function get crm\-object\-schemas/v3/schemas(map<string|string[]> headers = {}, *GetCrmObjectSchemasV3Schemas_getallQueries queries) returns CollectionResponseObjectSchemaNoPaging|error {
+    resource isolated function get .(map<string|string[]> headers = {}, *GetCrmObjectSchemasV3Schemas_getallQueries queries) returns CollectionResponseObjectSchemaNoPaging|error {
         string resourcePath = string ``;
         map<anydata> headerValues = {...headers};
         if self.apiKeyConfig is ApiKeysConfig {
@@ -94,7 +94,7 @@ public isolated client class Client {
         return self.clientEp->get(resourcePath, httpHeaders);
     }
 
-    resource isolated function get crm\-object\-schemas/v3/schemas/[string objectType](map<string|string[]> headers = {}) returns ObjectSchema|error {
+    resource isolated function get [string objectType](map<string|string[]> headers = {}) returns ObjectSchema|error {
         string resourcePath = string `/${getEncodedUri(objectType)}`;
         map<anydata> headerValues = {...headers};
         if self.apiKeyConfig is ApiKeysConfig {
@@ -104,7 +104,7 @@ public isolated client class Client {
         return self.clientEp->get(resourcePath, httpHeaders);
     }
 
-    resource isolated function patch crm\-object\-schemas/v3/schemas/[string objectType](ObjectTypeDefinitionPatch payload, map<string|string[]> headers = {}) returns ObjectTypeDefinition|error {
+    resource isolated function patch [string objectType](ObjectTypeDefinitionPatch payload, map<string|string[]> headers = {}) returns ObjectTypeDefinition|error {
         string resourcePath = string `/${getEncodedUri(objectType)}`;
         map<anydata> headerValues = {...headers};
         if self.apiKeyConfig is ApiKeysConfig {
@@ -117,7 +117,7 @@ public isolated client class Client {
         return self.clientEp->patch(resourcePath, request, httpHeaders);
     }
 
-    resource isolated function post crm\-object\-schemas/v3/schemas(ObjectSchemaEgg payload, map<string|string[]> headers = {}) returns ObjectSchema|error {
+    resource isolated function post .(ObjectSchemaEgg payload, map<string|string[]> headers = {}) returns ObjectSchema|error {
         string resourcePath = string ``;
         map<anydata> headerValues = {...headers};
         if self.apiKeyConfig is ApiKeysConfig {
@@ -130,7 +130,7 @@ public isolated client class Client {
         return self.clientEp->post(resourcePath, request, httpHeaders);
     }
 
-    resource isolated function post crm\-object\-schemas/v3/schemas/[string objectType]/associations(AssociationDefinitionEgg payload, map<string|string[]> headers = {}) returns AssociationDefinition|error {
+    resource isolated function post [string objectType]/associations(AssociationDefinitionEgg payload, map<string|string[]> headers = {}) returns AssociationDefinition|error {
         string resourcePath = string `/${getEncodedUri(objectType)}/associations`;
         map<anydata> headerValues = {...headers};
         if self.apiKeyConfig is ApiKeysConfig {
