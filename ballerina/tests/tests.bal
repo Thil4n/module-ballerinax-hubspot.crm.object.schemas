@@ -21,7 +21,7 @@ import ballerina/oauth2;
 
 const string CLIENT_ID = "bf7aa889-a677-4a76-93a6-c6b9fc896ff3";
 const string CLIENT_SECRET = "5b1ce2fe-0634-4055-ab9c-3bffe7efa00c";
-const string REFRESH_TOKEN = "5b1ce2fe-0634-4055-ab9c-3bffe7efa00c";
+const string REFRESH_TOKEN = "na1-2d3a-d4fb-4043-8229-7a7d9fc128df";
 
 
 
@@ -37,7 +37,7 @@ const string REFRESH_TOKEN = "5b1ce2fe-0634-4055-ab9c-3bffe7efa00c";
 // Global Client instance
 ConnectionConfig config = {httpVersion: http:HTTP_2_0, timeout: 60,auth: auth};
 
-final Client hpClient = check new Client(config, "http://127.0.0.1:3000");
+final Client hpClient = check new Client(config, "https://api.hubapi.com/crm-object-schemas/v3/schemas");
 
 
 

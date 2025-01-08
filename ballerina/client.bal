@@ -28,7 +28,7 @@ public isolated client class Client {
     # + config - The configurations to be used when initializing the `connector` 
     # + serviceUrl - URL of the target service 
     # + return - An error if connector initialization failed 
-    public isolated function init(ConnectionConfig config, string serviceUrl = "https://api.hubapi.com") returns error? {
+    public isolated function init(ConnectionConfig config, string serviceUrl = "https://api.hubapi.com/crm-object-schemas/v3/schemas") returns error? {
         http:ClientConfiguration httpClientConfig = {httpVersion: config.httpVersion, timeout: config.timeout, forwarded: config.forwarded, poolConfig: config.poolConfig, compression: config.compression, circuitBreaker: config.circuitBreaker, retryConfig: config.retryConfig, validation: config.validation};
         do {
             if config.http1Settings is ClientHttp1Settings {
@@ -63,7 +63,7 @@ public isolated client class Client {
     }
 
     resource isolated function delete crm\-object\-schemas/v3/schemas/[string objectType](map<string|string[]> headers = {}, *DeleteCrmObjectSchemasV3SchemasObjecttype_archiveQueries queries) returns http:Response|error {
-        string resourcePath = string `/crm-object-schemas/v3/schemas/${getEncodedUri(objectType)}`;
+        string resourcePath = string `/${getEncodedUri(objectType)}`;
         map<anydata> headerValues = {...headers};
         if self.apiKeyConfig is ApiKeysConfig {
             headerValues["private-app-legacy"] = self.apiKeyConfig?.private\-app\-legacy;
@@ -74,7 +74,7 @@ public isolated client class Client {
     }
 
     resource isolated function delete crm\-object\-schemas/v3/schemas/[string objectType]/associations/[string associationIdentifier](map<string|string[]> headers = {}) returns http:Response|error {
-        string resourcePath = string `/crm-object-schemas/v3/schemas/${getEncodedUri(objectType)}/associations/${getEncodedUri(associationIdentifier)}`;
+        string resourcePath = string `/${getEncodedUri(objectType)}/associations/${getEncodedUri(associationIdentifier)}`;
         map<anydata> headerValues = {...headers};
         if self.apiKeyConfig is ApiKeysConfig {
             headerValues["private-app-legacy"] = self.apiKeyConfig?.private\-app\-legacy;
@@ -84,7 +84,7 @@ public isolated client class Client {
     }
 
     resource isolated function get crm\-object\-schemas/v3/schemas(map<string|string[]> headers = {}, *GetCrmObjectSchemasV3Schemas_getallQueries queries) returns CollectionResponseObjectSchemaNoPaging|error {
-        string resourcePath = string `/crm-object-schemas/v3/schemas`;
+        string resourcePath = string ``;
         map<anydata> headerValues = {...headers};
         if self.apiKeyConfig is ApiKeysConfig {
             headerValues["private-app-legacy"] = self.apiKeyConfig?.private\-app\-legacy;
@@ -95,7 +95,7 @@ public isolated client class Client {
     }
 
     resource isolated function get crm\-object\-schemas/v3/schemas/[string objectType](map<string|string[]> headers = {}) returns ObjectSchema|error {
-        string resourcePath = string `/crm-object-schemas/v3/schemas/${getEncodedUri(objectType)}`;
+        string resourcePath = string `/${getEncodedUri(objectType)}`;
         map<anydata> headerValues = {...headers};
         if self.apiKeyConfig is ApiKeysConfig {
             headerValues["private-app-legacy"] = self.apiKeyConfig?.private\-app\-legacy;
@@ -105,7 +105,7 @@ public isolated client class Client {
     }
 
     resource isolated function patch crm\-object\-schemas/v3/schemas/[string objectType](ObjectTypeDefinitionPatch payload, map<string|string[]> headers = {}) returns ObjectTypeDefinition|error {
-        string resourcePath = string `/crm-object-schemas/v3/schemas/${getEncodedUri(objectType)}`;
+        string resourcePath = string `/${getEncodedUri(objectType)}`;
         map<anydata> headerValues = {...headers};
         if self.apiKeyConfig is ApiKeysConfig {
             headerValues["private-app-legacy"] = self.apiKeyConfig?.private\-app\-legacy;
@@ -118,7 +118,7 @@ public isolated client class Client {
     }
 
     resource isolated function post crm\-object\-schemas/v3/schemas(ObjectSchemaEgg payload, map<string|string[]> headers = {}) returns ObjectSchema|error {
-        string resourcePath = string `/crm-object-schemas/v3/schemas`;
+        string resourcePath = string ``;
         map<anydata> headerValues = {...headers};
         if self.apiKeyConfig is ApiKeysConfig {
             headerValues["private-app-legacy"] = self.apiKeyConfig?.private\-app\-legacy;
@@ -131,7 +131,7 @@ public isolated client class Client {
     }
 
     resource isolated function post crm\-object\-schemas/v3/schemas/[string objectType]/associations(AssociationDefinitionEgg payload, map<string|string[]> headers = {}) returns AssociationDefinition|error {
-        string resourcePath = string `/crm-object-schemas/v3/schemas/${getEncodedUri(objectType)}/associations`;
+        string resourcePath = string `/${getEncodedUri(objectType)}/associations`;
         map<anydata> headerValues = {...headers};
         if self.apiKeyConfig is ApiKeysConfig {
             headerValues["private-app-legacy"] = self.apiKeyConfig?.private\-app\-legacy;
